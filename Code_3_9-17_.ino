@@ -17,7 +17,7 @@ float voltage = 0;
 float dust_density = 0;
 
 #define RED      8
-#define GREEn    9
+#define GREEN    9
 #define BLUE     10
 
 void setup() {
@@ -27,14 +27,14 @@ void setup() {
   lcd.clear();
   pinMode (Dust_LED_PIN , OUTPUT);
   pinMode (RED, OUTPUT);
-  pinMode (GREEn, OUTPUT);
+  pinMode (GREEN, OUTPUT);
   pinMode (BLUE, OUTPUT);
 }
 
 void loop() {
   dht_check() ; //온습도 체크
   dust_check(); //미세먼지 체크
-  //RGB_LED_check(); //RFG LED체크
+  RGB_LED_check(); //RFG LED체크
 }
 
 void dht_check() {
@@ -66,4 +66,28 @@ void dust_check() {
   lcd.print ("Dust: ");
   lcd.print (dust_density);
   lcd.print (" ug/m3");
+}
+
+void RGB_LED_check() {
+  if(dust_density >= 151) {
+    LED_Color (1,0,0);  //빨강
+  }
+  else if(dust_density >= 51) {
+    LED_Color (1,1,0);  //노랑
+  }
+  else if(dust_density >= 16) {
+    LED_Color (0,1,0);  //초록
+  }
+  else if(dust_density >= 0) {
+    LED_Color (0,0,1);  //블루
+  }
+  else{
+    LED_Color (0,0,0);  //no color
+  }
+}
+
+void LED_Color (int r, int g, int b) {
+  digitalWrite (RED, r);
+  digitalWrite (GREEN, g);
+  digitalWrite (BLUE, b);
 }
